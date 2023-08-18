@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,6 @@ namespace PROJECT_g0la
         public Player? Duo { get; set; }
         public QueueHandler.Side Side = QueueHandler.Side.None;
         public bool QueueAccepted = false;
-
         public async Task<bool> RemoveQueue()
         {
             if (QueuePosition is null) return false;

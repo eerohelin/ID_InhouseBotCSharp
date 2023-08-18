@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static PROJECT_g0la.QueueHandler;
 
 namespace PROJECT_g0la
 {
@@ -68,20 +70,25 @@ namespace PROJECT_g0la
             {
                 player.QueueAccepted = true;
             }
+            await Program.Log(new LogMessage(LogSeverity.Info, "QueuePop", $"<{Program._client.GetUser(player.DiscordID).Username}> accepted the QueuePop"));
             await MessageHandler.UpdateQueuePopMessage(_pop);
             await CheckQueuePop();
-            
+
         }
 
         public async Task PlayerDecline(ulong id)
         {
+            if (!_players.ContainsKey(id.ToString())) { return; }
             await LeaveQueue(Program._client.GetUser(id));
             await MessageHandler.CancelQueuePop(Program._client.GetUser(id));
+
+            await Program.Log(new LogMessage(LogSeverity.Info, "QueuePop", $"<{Program._client.GetUser(id).Username}> declined Pop"));
         }
 
         public async Task QueuePopWentThroughHandler()
         {
             if (_pop.Accepted) { return; }
+            await queue.LogQueueEvents(Role.Mid, QueueObject.QueueEvent.Accepted);
             _pop.Accepted = true;
             QueuePopSuccessObject queuePop = new();
 
@@ -180,6 +187,13 @@ namespace PROJECT_g0la
 
             await queue.EnterQueue(player1, userTuple1.Item2);
             await queue.EnterQueue(player2, userTuple2.Item2);
+
+            Tuple<Tuple<Player, Role>, Tuple<Player, Role>> duoTuple = new Tuple<Tuple<Player, Role>, Tuple<Player, Role>>
+            (
+                new Tuple<Player, Role>(player1, userTuple1.Item2),
+                new Tuple<Player, Role>(player2, userTuple2.Item2)
+            );
+            await queue.LogQueueEvents(Role.Mid, QueueObject.QueueEvent.EnterDuo, duo: duoTuple);
         }
 
         public async Task<Player> CheckPlayerDB(SocketUser user)

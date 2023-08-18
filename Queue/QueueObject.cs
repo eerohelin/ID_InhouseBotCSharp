@@ -23,6 +23,16 @@ namespace PROJECT_g0la
 
         public QueueHandler _handler { get; set; }
 
+        public enum QueueEvent
+        {
+            Enter,
+            EnterDuo,
+            Leave,
+            Pop,
+            Accepted,
+            none
+        }
+
         public QueueObject()
         {
             AllRoles.Add(Top);
@@ -31,24 +41,47 @@ namespace PROJECT_g0la
             AllRoles.Add(Bottom);
             AllRoles.Add(Support);
         }
+
+        public async Task LogQueueEvents(Role role, QueueEvent queueEvent, Tuple<Tuple<Player, Role>, Tuple<Player, Role>> duo = null, Player player = null)
+        {
+            switch (queueEvent)
+            {
+                case QueueEvent.Enter:
+                    await Program.Log(new LogMessage(LogSeverity.Info, "QueueLog", $"{Program._client.GetUser(player.DiscordID).Username} entered Queue for role {role}"));
+                    break;
+                case QueueEvent.EnterDuo:
+                    await Program.Log(new LogMessage(LogSeverity.Info, "QueueLog", $"{Program._client.GetUser(duo.Item1.Item1.DiscordID).Username} entered Queue for role {duo.Item1.Item2} with Duo <{Program._client.GetUser(duo.Item2.Item1.DiscordID).Username}> for role {duo.Item2.Item2}"));
+                    break;
+                case QueueEvent.Leave:
+                    await Program.Log(new LogMessage(LogSeverity.Info, "QueueLog", $"{Program._client.GetUser(player.DiscordID).Username} left Queue"));
+                    break;
+                case QueueEvent.Pop:
+                    await Program.Log(new LogMessage(LogSeverity.Info, "QueueLog", $"Queue popped"));
+                    break;
+                case QueueEvent.Accepted:
+                    await Program.Log(new LogMessage(LogSeverity.Info, "QueueLog", $"Queue accepted"));
+                    break;
+            }
+         }
+
         public async Task EnterQueue(Player player, QueueHandler.Role role)
         {
             switch (role)
             {
                 case Role.Top:
-                    await QueuePlayer(player, Top);
+                    await QueuePlayer(player, Top, role);
                     break;
                 case Role.Jungle:
-                    await QueuePlayer(player, Jungle);
+                    await QueuePlayer(player, Jungle, role);
                     break;
                 case Role.Mid:
-                    await QueuePlayer(player, Mid);
+                    await QueuePlayer(player, Mid, role);
                     break;
                 case Role.Bottom:
-                    await QueuePlayer(player, Bottom);
+                    await QueuePlayer(player, Bottom, role);
                     break;
                 case Role.Support:
-                    await QueuePlayer(player, Support);
+                    await QueuePlayer(player, Support, role);
                     break;
             }
 
@@ -61,6 +94,8 @@ namespace PROJECT_g0la
         {
             await player.RemoveQueue();
             await MessageHandler.HandleQueueMessage();
+
+            await LogQueueEvents(Role.Mid, QueueEvent.Leave, player:player);
         }
 
         private async Task CheckQueue()
@@ -69,6 +104,7 @@ namespace PROJECT_g0la
             if (isPop)
             {
                 await _handler.QueuePop();
+                await LogQueueEvents(Role.Mid, QueueEvent.Pop);
             }
         }
 
@@ -82,12 +118,14 @@ namespace PROJECT_g0la
             Console.WriteLine("SUPPORT: [" + string.Join(",", Support) + "]");
         }
 
-        private async Task QueuePlayer(Player player, List<Player> roleList)
+        private async Task QueuePlayer(Player player, List<Player> roleList, Role role)
         {
             if (player.Duo is not null) { await QueueDuoPlayer(player, roleList); return; }
             await player.RemoveQueue();
             roleList.Add(player);
             player.QueuePosition = roleList;
+
+            await LogQueueEvents(role, QueueEvent.Enter, player:player);
         }
 
         private async Task QueueDuoPlayer(Player player, List<Player> roleList)

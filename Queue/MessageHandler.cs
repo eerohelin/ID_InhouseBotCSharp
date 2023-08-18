@@ -40,8 +40,7 @@ namespace PROJECT_g0la
             await CreateCommands();
 
 
-            ulong channelId = 1139615881194897468;
-            _channel = _client.GetChannel(channelId) as ISocketMessageChannel;
+            _channel = _client.GetChannel(Program._config.CHANNEL_QUEUE) as ISocketMessageChannel;
 
             await PurgeChannel();
 
@@ -166,13 +165,13 @@ namespace PROJECT_g0la
 
         public static async Task HandleQueuePopAccept(QueuePopSuccessObject popObject)
         {
-            var guild = _client.GetGuild(1139600379022147604);
+            var guild = _client.GetGuild(Program._config.GUILD_ID);
 
-            SocketCategoryChannel category = guild.GetCategoryChannel(1139615958332362842);
+            SocketCategoryChannel category = guild.GetCategoryChannel(Program._config.CATEGORY_GAMES);
 
-            RestTextChannel newChannel = await guild.CreateTextChannelAsync($"Game #{category.Channels.Count() + 1}", tcp => tcp.CategoryId = 1139615958332362842);
-            RestVoiceChannel vc1 = await guild.CreateVoiceChannelAsync("BLUE", tcp => tcp.CategoryId = 1139615958332362842);
-            RestVoiceChannel vc2 = await guild.CreateVoiceChannelAsync("RED", tcp => tcp.CategoryId = 1139615958332362842);
+            RestTextChannel newChannel = await guild.CreateTextChannelAsync($"Game #{category.Channels.Count() + 1}", tcp => tcp.CategoryId = category.Id);
+            RestVoiceChannel vc1 = await guild.CreateVoiceChannelAsync("BLUE", tcp => tcp.CategoryId = category.Id);
+            RestVoiceChannel vc2 = await guild.CreateVoiceChannelAsync("RED", tcp => tcp.CategoryId = category.Id);
 
             var allowViewPermission = new OverwritePermissions(viewChannel: PermValue.Allow);
             var dontAllowViewPermission = new OverwritePermissions(viewChannel: PermValue.Deny);

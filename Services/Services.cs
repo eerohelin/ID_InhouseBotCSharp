@@ -50,7 +50,7 @@ namespace PROJECT_g0la
                 Top[1].Duo = Jungle.First();
                 Jungle.First().Duo = Top[1];
             }
-            
+
         };
         public static async Task<Player> GetPlayerFromDB(ulong ID)
         {
@@ -64,7 +64,23 @@ namespace PROJECT_g0la
                 player.DiscordID = ID;
 
                 return player;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public static async Task<Config> GetConfig()
+        {
+            string filePath = "config.json";
+            try
+            {
+                string jsonContent = System.IO.File.ReadAllText(filePath);
+                Config config = JsonConvert.DeserializeObject<Config>(jsonContent);
+
+                return config;
+            } catch (FileNotFoundException ex)
             {
                 return null;
             }
@@ -105,7 +121,7 @@ namespace PROJECT_g0la
 
     public class PlayersData
     {
-        public Dictionary<string, Player>? Players {  get; set; }
+        public Dictionary<string, Player>? Players { get; set; }
     }
 
     public class ReplayObject
@@ -134,5 +150,15 @@ namespace PROJECT_g0la
         public string? VICTORY_POINT_TOTAL { get; set; }
         public string? WIN { get; set; }
     }
+
+
+    public class Config
+    {
+        public string BOT_KEY { get; set; }
+        public ulong CHANNEL_QUEUE { get; set; }
+        public ulong CATEGORY_GAMES { get; set; }
+        public ulong GUILD_ID { get; set; }
+    }
+
 
 }
