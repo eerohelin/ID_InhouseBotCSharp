@@ -53,7 +53,7 @@ namespace PROJECT_g0la
                 await InitalizationError($"ERROR Loading valid value \"BOT_KEY\" | VALUE: {config.BOT_KEY}");
             }
 
-            Console.WriteLine(new LogMessage(LogSeverity.Info, "Config", $"Loading CHANNE_QUEUE"));
+            Console.WriteLine(new LogMessage(LogSeverity.Info, "Config", $"Loading CHANNEL_QUEUE"));
             if (config.CHANNEL_QUEUE == 0)
             {
                 await InitalizationError($"ERROR Loading valid value \"CHANNEL_QUEUE\" | VALUE: {config.CHANNEL_QUEUE}");
@@ -65,8 +65,8 @@ namespace PROJECT_g0la
                 await InitalizationError($"ERROR Loading valid value \"CATEGORY_GAMES\" | VALUE: {config.CATEGORY_GAMES}");
             }
 
-            Console.Clear();
             _config = config;
+            Console.WriteLine(new LogMessage(LogSeverity.Info, "Config", $"Config load success"));
         }
 
         private async Task InitalizationError(string message)
