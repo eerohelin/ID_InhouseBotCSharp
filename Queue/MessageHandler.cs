@@ -169,7 +169,7 @@ namespace PROJECT_g0la
 
             SocketCategoryChannel category = guild.GetCategoryChannel(Program._config.CATEGORY_GAMES);
 
-            RestTextChannel newChannel = await guild.CreateTextChannelAsync($"Game #{category.Channels.Count() + 1}", tcp => tcp.CategoryId = category.Id);
+            RestTextChannel newChannel = await guild.CreateTextChannelAsync($"game", tcp => tcp.CategoryId = category.Id);
             RestVoiceChannel vc1 = await guild.CreateVoiceChannelAsync("BLUE", tcp => tcp.CategoryId = category.Id);
             RestVoiceChannel vc2 = await guild.CreateVoiceChannelAsync("RED", tcp => tcp.CategoryId = category.Id);
 
@@ -195,19 +195,37 @@ namespace PROJECT_g0la
                 //}
             }
 
+            //string message = "```ini\n[MATCH]\n\n" +
+            //    "[BLUE]\n" +
+            //    $"Top:     {_client.GetUser(popObject.Teams[Side.Blue].Top.DiscordID)}\n" +
+            //    $"Jungle:  {_client.GetUser(popObject.Teams[Side.Blue].Jungle.DiscordID)}\n" +
+            //    $"Mid:     {_client.GetUser(popObject.Teams[Side.Blue].Mid.DiscordID)}\n" +
+            //    $"Bottom:  {_client.GetUser(popObject.Teams[Side.Blue].Bottom.DiscordID)}\n" +
+            //    $"Support: {_client.GetUser(popObject.Teams[Side.Blue].Support.DiscordID)}\n" +
+            //    $"\n[RED]\n" +
+            //    $"Top:     {_client.GetUser(popObject.Teams[Side.Red].Top.DiscordID)}\n" +
+            //    $"Jungle:  {_client.GetUser(popObject.Teams[Side.Red].Jungle.DiscordID)}\n" +
+            //    $"Mid:     {_client.GetUser(popObject.Teams[Side.Red].Mid.DiscordID)}\n" +
+            //    $"Bottom:  {_client.GetUser(popObject.Teams[Side.Red].Bottom.DiscordID)}\n" +
+            //    $"Support: {_client.GetUser(popObject.Teams[Side.Red].Support.DiscordID)}\n" +
+            //    $"```" +
+            //    $"\n[Blue OPGG](https://www.op.gg/multisearch/euw?summoners={string.Join(",", popObject.Teams[Side.Blue].AllPlayers.Select(player => player.Summoner.Replace(" ", "")))})" +
+            //    $"\n[Red OPGG](https://www.op.gg/multisearch/euw?summoners={string.Join(",", popObject.Teams[Side.Red].AllPlayers.Select(player => player.Summoner.Replace(" ", "")))})" +
+            //    $"";
+
             string message = "```ini\n[MATCH]\n\n" +
                 "[BLUE]\n" +
-                $"Top:     {_client.GetUser(popObject.Teams[Side.Blue].Top.DiscordID)}\n" +
-                $"Jungle:  {_client.GetUser(popObject.Teams[Side.Blue].Jungle.DiscordID)}\n" +
-                $"Mid:     {_client.GetUser(popObject.Teams[Side.Blue].Mid.DiscordID)}\n" +
-                $"Bottom:  {_client.GetUser(popObject.Teams[Side.Blue].Bottom.DiscordID)}\n" +
-                $"Support: {_client.GetUser(popObject.Teams[Side.Blue].Support.DiscordID)}\n" +
+                $"Top:     {popObject.Teams[Side.Blue].Top.Summoner}\n" +
+                $"Jungle:  {popObject.Teams[Side.Blue].Jungle.Summoner}\n" +
+                $"Mid:     {popObject.Teams[Side.Blue].Mid.Summoner}\n" +
+                $"Bottom:  {popObject.Teams[Side.Blue].Bottom.Summoner}\n" +
+                $"Support: {popObject.Teams[Side.Blue].Support.Summoner}\n" +
                 $"\n[RED]\n" +
-                $"Top:     {_client.GetUser(popObject.Teams[Side.Red].Top.DiscordID)}\n" +
-                $"Jungle:  {_client.GetUser(popObject.Teams[Side.Red].Jungle.DiscordID)}\n" +
-                $"Mid:     {_client.GetUser(popObject.Teams[Side.Red].Mid.DiscordID)}\n" +
-                $"Bottom:  {_client.GetUser(popObject.Teams[Side.Red].Bottom.DiscordID)}\n" +
-                $"Support: {_client.GetUser(popObject.Teams[Side.Red].Support.DiscordID)}\n" +
+                $"Top:     {popObject.Teams[Side.Red].Top.Summoner}\n" +
+                $"Jungle:  {popObject.Teams[Side.Red].Jungle.Summoner}\n" +
+                $"Mid:     {popObject.Teams[Side.Red].Mid.Summoner}\n" +
+                $"Bottom:  {popObject.Teams[Side.Red].Bottom.Summoner}\n" +
+                $"Support: {popObject.Teams[Side.Red].Support.Summoner}\n" +
                 $"```" +
                 $"\n[Blue OPGG](https://www.op.gg/multisearch/euw?summoners={string.Join(",", popObject.Teams[Side.Blue].AllPlayers.Select(player => player.Summoner.Replace(" ", "")))})" +
                 $"\n[Red OPGG](https://www.op.gg/multisearch/euw?summoners={string.Join(",", popObject.Teams[Side.Red].AllPlayers.Select(player => player.Summoner.Replace(" ", "")))})" +

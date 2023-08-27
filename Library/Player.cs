@@ -13,7 +13,7 @@ namespace PROJECT_g0la
         public string? Summoner { get; set; }
         public int? Wins { get; set; }
         public int? Losses { get; set; }
-        public int? Points { get; set; }
+        public int Elo { get; set; }
         public List<Player>? QueuePosition { get; set; }
         public List<Tuple<Player, Player>>? DuoList { get; set; }
         public Player? Duo { get; set; }

@@ -16,28 +16,28 @@ namespace PROJECT_g0la
         {
             public static List<Player> Top = new()
             {
-                new Player() { Summoner = "h0laa", DiscordID = 100},
-                new Player() { Summoner = "h0laa", DiscordID = 100}
+                new Player() { Summoner = "Top1", DiscordID = 100, Elo = 1200},
+                new Player() { Summoner = "Top2", DiscordID = 100, Elo = 1400}
             };
             public static List<Player> Jungle = new()
             {
-                new Player() { Summoner = "BL Bitse", DiscordID = 100},
-                new Player() { Summoner = "BL Bitse", DiscordID = 100}
+                new Player() { Summoner = "Jg1", DiscordID = 100, Elo = 1200},
+                new Player() { Summoner = "Jg2", DiscordID = 100, Elo = 970}
             };
             public static List<Player> Mid = new()
             {
-                new Player() { Summoner = "Ozziee", DiscordID = 100},
-                new Player() { Summoner = "Ozziee", DiscordID = 100}
+                new Player() { Summoner = "Mid1", DiscordID = 100, Elo = 1100},
+                new Player() { Summoner = "Mid2", DiscordID = 100, Elo = 1200}
             };
             public static List<Player> Bottom = new()
             {
-                new Player() { Summoner = "PeaceRuler", DiscordID = 100},
-                new Player() { Summoner = "PeaceRuler", DiscordID = 100}
+                new Player() { Summoner = "Bot1", DiscordID = 100, Elo = 990},
+                new Player() { Summoner = "Bot2", DiscordID = 100, Elo = 995}
             };
             public static List<Player> Support = new()
             {
-                new Player() { Summoner = "Pluffuff", DiscordID = 100},
-                new Player() { Summoner = "Pluffuff", DiscordID = 100}
+                new Player() { Summoner = "Supp1", DiscordID = 100, Elo = 1243},
+                new Player() { Summoner = "Supp2", DiscordID = 100, Elo = 1000}
             };
 
             public static List<List<Player>> AllRoles = new()

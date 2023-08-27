@@ -70,7 +70,7 @@ namespace PROJECT_g0la
             {
                 player.QueueAccepted = true;
             }
-            await Program.Log(new LogMessage(LogSeverity.Info, "QueuePop", $"<{Program._client.GetUser(player.DiscordID).Username}> accepted the QueuePop"));
+            await Program.Log(new LogMessage(LogSeverity.Info, "QueuePop", $"{Program._client.GetUser(player.DiscordID).Username} accepted the QueuePop"));
             await MessageHandler.UpdateQueuePopMessage(_pop);
             await CheckQueuePop();
 
@@ -82,7 +82,7 @@ namespace PROJECT_g0la
             await LeaveQueue(Program._client.GetUser(id));
             await MessageHandler.CancelQueuePop(Program._client.GetUser(id));
 
-            await Program.Log(new LogMessage(LogSeverity.Info, "QueuePop", $"<{Program._client.GetUser(id).Username}> declined Pop"));
+            await Program.Log(new LogMessage(LogSeverity.Info, "QueuePop", $"{Program._client.GetUser(id).Username} declined Pop"));
         }
 
         public async Task QueuePopWentThroughHandler()
@@ -96,44 +96,45 @@ namespace PROJECT_g0la
             await Services.MockData.AssignDuos();
             List<List<Player>> roleList = Services.MockData.AllRoles;
 
+            Team blueTeam = new(Side.Blue);
+            Team redTeam = new(Side.Red);
+
 
             for (int i = 0; i < roleList.Count; i++) // Get first two players from each role
             {
                 List<Player> list = roleList[i];
                 List<Player> firstTwo = list.Take(2).ToList();
 
-                await AssignRoles(firstTwo);
+                await AssignSides(firstTwo);
 
                 foreach (Player player in firstTwo)
                 {
                     if (!queuePop.Teams.ContainsKey(player.Side)) { queuePop.Teams[player.Side] = new Team(player.Side); }
-                    queuePop.Teams[player.Side].AllPlayers.Add(player);
 
-                    switch(i)
+                    switch(player.Side)
                     {
-                        case 0:
-                            queuePop.Teams[player.Side].Top = player;
+                        case Side.Blue:
+                            blueTeam.AllPlayers.Add(player);
                             break;
-                        case 1:
-                            queuePop.Teams[player.Side].Jungle = player;
+                        case Side.Red:
+                            redTeam.AllPlayers.Add(player);
                             break;
-                        case 2:
-                            queuePop.Teams[player.Side].Mid = player;
-                            break;
-                        case 3:
-                            queuePop.Teams[player.Side].Bottom = player;
-                            break;
-                        case 4:
-                            queuePop.Teams[player.Side].Support = player;
-                            break;
-
                     }
+
                     // Reset Player properties
                     player.QueueAccepted = false;
                     player.Side = Side.None;
                     await player.RemoveQueue();
                 }
             }
+
+            List<Team> teams = Matchmaking.MakeTeamsMoreEven(new List<Team>() { blueTeam, redTeam }, 3);
+
+            queuePop.Teams[Side.Blue] = teams[0];
+            queuePop.Teams[Side.Red] = teams[1];
+
+            queuePop.Teams[Side.Blue].LoadPlayers();
+            queuePop.Teams[Side.Red].LoadPlayers();
 
             foreach (List<Player> list in roleList)
             {
@@ -143,7 +144,7 @@ namespace PROJECT_g0la
             await MessageHandler.HandleQueuePopAccept(queuePop);
         }
 
-        public async Task AssignRoles(List<Player> players)
+        public async Task AssignSides(List<Player> players)
         {
             List<Side> sides = new List<Side>() { Side.Blue, Side.Red };
             foreach (Player player in players)
