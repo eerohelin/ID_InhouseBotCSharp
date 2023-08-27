@@ -170,8 +170,10 @@ namespace PROJECT_g0la
             SocketCategoryChannel category = guild.GetCategoryChannel(Program._config.CATEGORY_GAMES);
 
             RestTextChannel newChannel = await guild.CreateTextChannelAsync($"game", tcp => tcp.CategoryId = category.Id);
-            RestVoiceChannel vc1 = await guild.CreateVoiceChannelAsync("BLUE", tcp => tcp.CategoryId = category.Id);
-            RestVoiceChannel vc2 = await guild.CreateVoiceChannelAsync("RED", tcp => tcp.CategoryId = category.Id);
+            RestVoiceChannel vc1 = await guild.CreateVoiceChannelAsync($"BLUE", tcp => tcp.CategoryId = category.Id);
+            RestVoiceChannel vc2 = await guild.CreateVoiceChannelAsync($"RED", tcp => tcp.CategoryId = category.Id);
+
+            await newChannel.ModifyAsync(prop => prop.Name = $"game-{newChannel.Id}");
 
             var allowViewPermission = new OverwritePermissions(viewChannel: PermValue.Allow);
             var dontAllowViewPermission = new OverwritePermissions(viewChannel: PermValue.Deny);
@@ -197,17 +199,17 @@ namespace PROJECT_g0la
 
             //string message = "```ini\n[MATCH]\n\n" +
             //    "[BLUE]\n" +
-            //    $"Top:     {_client.GetUser(popObject.Teams[Side.Blue].Top.DiscordID)}\n" +
-            //    $"Jungle:  {_client.GetUser(popObject.Teams[Side.Blue].Jungle.DiscordID)}\n" +
-            //    $"Mid:     {_client.GetUser(popObject.Teams[Side.Blue].Mid.DiscordID)}\n" +
-            //    $"Bottom:  {_client.GetUser(popObject.Teams[Side.Blue].Bottom.DiscordID)}\n" +
-            //    $"Support: {_client.GetUser(popObject.Teams[Side.Blue].Support.DiscordID)}\n" +
+            //    $"Top:     {popObject.Teams[Side.Blue].Top.Username}\n" +
+            //    $"Jungle:  {popObject.Teams[Side.Blue].Jungle.Username}\n" +
+            //    $"Mid:     {popObject.Teams[Side.Blue].Mid.Username}\n" +
+            //    $"Bottom:  {popObject.Teams[Side.Blue].Bottom.Username}\n" +
+            //    $"Support: {popObject.Teams[Side.Blue].Support.Username}\n" +
             //    $"\n[RED]\n" +
-            //    $"Top:     {_client.GetUser(popObject.Teams[Side.Red].Top.DiscordID)}\n" +
-            //    $"Jungle:  {_client.GetUser(popObject.Teams[Side.Red].Jungle.DiscordID)}\n" +
-            //    $"Mid:     {_client.GetUser(popObject.Teams[Side.Red].Mid.DiscordID)}\n" +
-            //    $"Bottom:  {_client.GetUser(popObject.Teams[Side.Red].Bottom.DiscordID)}\n" +
-            //    $"Support: {_client.GetUser(popObject.Teams[Side.Red].Support.DiscordID)}\n" +
+            //    $"Top:     {popObject.Teams[Side.Red].Top.Username}\n" +
+            //    $"Jungle:  {popObject.Teams[Side.Red].Jungle.Username}\n" +
+            //    $"Mid:     {popObject.Teams[Side.Red].Mid.Username}\n" +
+            //    $"Bottom:  {popObject.Teams[Side.Red].Bottom.Username}\n" +
+            //    $"Support: {popObject.Teams[Side.Red].Support.Username}\n" +
             //    $"```" +
             //    $"\n[Blue OPGG](https://www.op.gg/multisearch/euw?summoners={string.Join(",", popObject.Teams[Side.Blue].AllPlayers.Select(player => player.Summoner.Replace(" ", "")))})" +
             //    $"\n[Red OPGG](https://www.op.gg/multisearch/euw?summoners={string.Join(",", popObject.Teams[Side.Red].AllPlayers.Select(player => player.Summoner.Replace(" ", "")))})" +

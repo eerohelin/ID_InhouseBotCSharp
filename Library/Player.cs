@@ -10,6 +10,7 @@ namespace PROJECT_g0la
     public class Player
     {
         public ulong DiscordID { get; set; }
+        public string Username => Program._client.GetUser(DiscordID).Username;
         public string? Summoner { get; set; }
         public int? Wins { get; set; }
         public int? Losses { get; set; }
